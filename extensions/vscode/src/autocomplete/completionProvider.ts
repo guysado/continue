@@ -151,7 +151,10 @@ export class ContinueCompletionProvider
     try {
       const abortController = new AbortController();
       const signal = abortController.signal;
-      token.onCancellationRequested(() => abortController.abort());
+      token.onCancellationRequested(() => {
+        console.log("Completion request cancelled");
+        abortController.abort();
+      });
 
       const config = await this.configHandler.loadConfig();
       let clipboardText = "";
@@ -297,6 +300,7 @@ export class ContinueCompletionProvider
     }
 
     if (abortSignal.aborted) {
+      console.log("ContinueCompletionProvider.willDisplay aborted");
       return false;
     }
 
